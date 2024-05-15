@@ -54,6 +54,10 @@ if device == 'cuda':
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(net.parameters(), lr=0.1,
                       momentum=0.9, weight_decay=1e-4)
+
+# learning rate is 0.1 when iterations is smaller than 32k
+# learning rate is 0.01 when iterations are between 32k and 48k
+# learning rate is 0.001 when iterations are larger than 48k
 scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer,[32000,48000], gamma=0.1)
 
 
@@ -108,7 +112,7 @@ start_epoch = 0
 for epoch in range(start_epoch, start_epoch+200):
     iter = train(epoch,iter)
     test(epoch,iter)
-    if iter > 64000:
+    if iter > 64000: # terminate training at 64k
         break
     scheduler.step()
 writer.flush()
