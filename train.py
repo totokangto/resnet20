@@ -1,4 +1,3 @@
-'''Train CIFAR10 with PyTorch.'''
 from torch.utils.tensorboard import SummaryWriter
 import torch
 import torch.nn as nn
