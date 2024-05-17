@@ -89,7 +89,7 @@ def train(epoch,iter):
     return iter 
 
 def test(epoch,iter):
-    global best_acc
+    global lowest_test_error
     net.eval()
     test_loss = 0
     correct = 0
@@ -106,14 +106,18 @@ def test(epoch,iter):
             correct += predicted.eq(targets).sum().item()
     writer.add_scalar("Loss_test", test_loss/(batch_idx+1), iter)
     writer.add_scalar("test_error",100.*(1.-correct/total), iter)
+    if lowest_test_error > 100.*(1.-correct/total):
+        lowest_test_error = 100.*(1.-correct/total)
     
 iter = 0
 start_epoch = 0
+lowest_test_error = 100
 for epoch in range(start_epoch, start_epoch+200):
     iter = train(epoch,iter)
     test(epoch,iter)
     if iter > 64000: # terminate training at 64k
         break
     scheduler.step()
+print(f"==========test error : {lowest_test_error}===========")
 writer.flush()
 writer.close()
