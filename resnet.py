@@ -83,7 +83,3 @@ class ResNet20(nn.Module):
         return out
 def resnet20():
     return ResNet20(BuildingBlock, [3, 3, 3])
-def test():
-    net = resnet20()
-    y = net(torch.randn(1, 3, 32, 32))
-    print(y.size())
